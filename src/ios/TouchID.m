@@ -211,4 +211,25 @@ NSString *keychainItemServiceName;
   return YES;
 }
 
+- (void) saveToKeychain:(CDVInvokedUrlCommand*) command {
+  
+  NSString* password = [command.arguments objectAtIndex:0];
+  CFErrorRef accessControlError = NULL;
+  SecAccessControlRef accessControlRef = SecAccessControlCreateWithFlags(
+    kCFAllocatorDefault,
+    kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
+    kSecAccessControlBiometryCurrentSet,
+    &accessControlError
+  );
+  
+  NSDictionary *attributes = @{
+    (_bridge id)kSecClass: (_bridge id)kSecClassGenericPassword,
+    (_bridge id)kSecAttrService: @"TouchIDExample",
+    (_bridge id)kSecValueData: [password dataUsingEncoding:NSUTF8StringEncoding],
+    (_bridge id)kSecUseAuthenticationUIFail: @YES,
+    (_bridge id)kSecAttrAccessControl: (_bridge_transfer id)accessControlRef
+  };
+  
+}
+
 @end
