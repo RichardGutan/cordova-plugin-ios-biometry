@@ -213,7 +213,9 @@ NSString *keychainItemServiceName;
 
 - (void) saveToKeychain:(CDVInvokedUrlCommand*) command {
   
+  CDVPluginResult* pluginResult = NULL;
   NSString* password = [command.arguments objectAtIndex:0];
+  
   CFErrorRef accessControlError = NULL;
   SecAccessControlRef accessControlRef = SecAccessControlCreateWithFlags(
     kCFAllocatorDefault,
@@ -223,13 +225,23 @@ NSString *keychainItemServiceName;
   );
   
   NSDictionary *attributes = @{
-    (_bridge id)kSecClass: (_bridge id)kSecClassGenericPassword,
-    (_bridge id)kSecAttrService: @"TouchIDExample",
-    (_bridge id)kSecValueData: [password dataUsingEncoding:NSUTF8StringEncoding],
-    (_bridge id)kSecUseAuthenticationUIFail: @YES,
-    (_bridge id)kSecAttrAccessControl: (_bridge_transfer id)accessControlRef
+    (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
+    (__bridge id)kSecAttrService: @"TouchIDExample",
+    (__bridge id)kSecValueData: [password dataUsingEncoding:NSUTF8StringEncoding],
+    (__bridge id)kSecUseAuthenticationUIFail: @YES,
+    (__bridge id)kSecAttrAccessControl: (__bridge_transfer id)accessControlRef
   };
   
+  OSStatus result = SecItemAdd((__bridge CFDictionaryRef)attributes, NULL);
+  CFStringRef statusMessage = SecCopyErrorMessageString(result, NULL);
+  
+  if (statusMessage == NULL) {
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+  } else {
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:statusMessage];
+  }
+  
+  [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 @end
