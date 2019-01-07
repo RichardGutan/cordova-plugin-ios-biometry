@@ -229,7 +229,7 @@ NSString *keychainItemServiceName;
     (__bridge id)kSecAttrService: @"TouchIDExample",
     (__bridge id)kSecValueData: [password dataUsingEncoding:NSUTF8StringEncoding],
     (__bridge id)kSecUseAuthenticationUIFail: @YES,
-    (__bridge id)kSecAttrAccessControl: (__bridge_transfer id)accessControlRef
+    (__bridge id)kSecAttrAccessControl: (__bridge id)accessControlRef
   };
   
   OSStatus result = SecItemAdd((__bridge CFDictionaryRef)attributes, NULL);
