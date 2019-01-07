@@ -228,7 +228,6 @@ NSString *keychainItemServiceName;
     (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
     (__bridge id)kSecAttrService: @"TouchIDExample",
     (__bridge id)kSecValueData: [password dataUsingEncoding:NSUTF8StringEncoding],
-    (__bridge id)kSecUseAuthenticationUIFail: @YES,
     (__bridge id)kSecAttrAccessControl: (__bridge id)accessControlRef
   };
   
