@@ -238,7 +238,7 @@ NSString *keychainItemServiceName;
   if (statusMessage == NULL) {
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
   } else {
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:statusMessage];
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:(__bridge NSString)statusMessage];
   }
   
   [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
