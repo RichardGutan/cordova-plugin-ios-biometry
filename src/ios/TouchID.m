@@ -232,12 +232,12 @@ NSString *keychainItemServiceName;
   };
   
   OSStatus result = SecItemAdd((__bridge CFDictionaryRef)attributes, NULL);
-  CFStringRef statusMessage = SecCopyErrorMessageString(result, NULL);
   
-  if (statusMessage == NULL) {
+  if (result == errSecSuccess) {
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
   } else {
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:(__bridge NSString *)statusMessage];
+    CFStringRef errorMessage = SecCopyErrorMessageString(result, NULL);
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:(__bridge NSString *)errorMessage];
   }
   
   [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
