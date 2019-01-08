@@ -214,8 +214,9 @@ NSString *keychainItemServiceName;
 - (void) saveToKeychain:(CDVInvokedUrlCommand*) command {
   
   CDVPluginResult* pluginResult = NULL;
-  NSString* password = [command.arguments objectAtIndex:0];
-  
+  NSString* key = [command.arguments objectAtIndex:0]
+  NSString* value = [command.arguments objectAtIndex:1];
+
   CFErrorRef accessControlError = NULL;
   SecAccessControlRef accessControlRef = SecAccessControlCreateWithFlags(
     kCFAllocatorDefault,
@@ -223,16 +224,32 @@ NSString *keychainItemServiceName;
     kSecAccessControlBiometryCurrentSet,
     &accessControlError
   );
-  
-  NSDictionary *attributes = @{
-    (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
-    (__bridge id)kSecAttrService: @"TouchIDExample",
-    (__bridge id)kSecValueData: [password dataUsingEncoding:NSUTF8StringEncoding],
-    (__bridge id)kSecAttrAccessControl: (__bridge id)accessControlRef
-  };
-  
-  OSStatus result = SecItemAdd((__bridge CFDictionaryRef)attributes, NULL);
-  
+
+  OSStatus result = NULL;
+
+  if ([self isInKeychain:key]) {
+    NSDictionary *query = @{
+      (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
+      (__bridge id)kSecAttrService: key,
+      (__bridge id)kSecAttrAccessControl: (__bridge id)accessControlRef
+    };
+
+    NSDictionary *attributesToUpdate = @{
+      (__bridge id)kSecValueData: [value dataUsingEncoding:NSUTF8StringEncoding],
+    };
+
+    result = SecItemUpdate((__bridge CFDictionaryRef)query, (__bridge CFDictionaryRef)attributesToUpdate);
+  } else {
+    NSDictionary *query = @{
+      (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
+      (__bridge id)kSecAttrService: key,
+      (__bridge id)kSecValueData: [value dataUsingEncoding:NSUTF8StringEncoding],
+      (__bridge id)kSecAttrAccessControl: (__bridge id)accessControlRef
+    };
+    
+    result = SecItemAdd((__bridge CFDictionaryRef)query, NULL);
+  }
+
   if (result == errSecSuccess) {
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
   } else {
@@ -241,6 +258,19 @@ NSString *keychainItemServiceName;
   }
   
   [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (BOOL) isInKeychain: (NSString*) key {
+  NSDictionary *query = @{
+    (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
+    (__bridge id)kSecAttrService: key,
+    (__bridge id)kSecUseAuthenticationUI: kSecUseAuthenticationUIFail
+  };
+
+  CFDataRef dataRef = NULL;
+  OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, (CFTypeRef*)&dataRef);
+
+  return status == errSecInteractionNotAllowed;
 }
 
 @end
