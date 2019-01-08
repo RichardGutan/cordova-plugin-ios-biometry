@@ -264,7 +264,7 @@ NSString *keychainItemServiceName;
   NSDictionary *query = @{
     (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
     (__bridge id)kSecAttrService: key,
-    (__bridge id)kSecUseAuthenticationUI: kSecUseAuthenticationUIFail
+    (__bridge id)kSecUseAuthenticationUI: (__bridge id)kSecUseAuthenticationUISkip
   };
 
   CFDataRef dataRef = NULL;
