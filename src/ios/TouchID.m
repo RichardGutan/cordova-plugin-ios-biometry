@@ -262,7 +262,7 @@ NSString *keychainItemServiceName;
   [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
-- (BOOL) isInKeychain: (NSString*) key {
+- (BOOL) isInKeychain:(NSString*) key {
   NSDictionary *query = @{
     (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
     (__bridge id)kSecAttrService: key,
@@ -274,11 +274,54 @@ NSString *keychainItemServiceName;
   return status == errSecInteractionNotAllowed;
 }
 
-- (BOOL) retrieveFromKeychain: (NSString*) key {
-//    NSData *passwordData = (__bridge_transfer NSData *)dataRef;
-//    NSString *password = [[NSString alloc] initWithData:passwordData encoding:NSUTF8StringEncoding];
-//    NSLog(password);
-//    NSLog((__bridge NSString *)SecCopyErrorMessageString(status, NULL));
+
+- (void) deleteFromKeychain:(CDVInvokedUrlCommand*) command {
+
+	CDVPluginResult* pluginResult = NULL;
+	NSString *key = [command.arguments objectAtIndex:0];
+	NSString *message = [command.arguments objectAtIndex:1];
+
+  NSDictionary *query = @{
+    (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
+    (__bridge id)kSecAttrService: key,
+		(__bridge id)kSecUseOperationPrompt: message
+  };
+
+	OSStatus status = SecItemDelete((__bridge CFDictionaryRef)query);
+
+	if (status == errSecSuccess) {
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+  } else {
+    CFStringRef errorMessage = SecCopyErrorMessageString(status, NULL);
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:(__bridge NSString *)errorMessage];
+  }
+}
+
+- (void) retrieveFromKeychain:(CDVInvokedUrlCommand*) command {
+
+	CDVPluginResult* pluginResult = NULL;
+	NSString *key = [command.arguments objectAtIndex:0];
+	NSString *message = [command.arguments objectAtIndex:1];
+
+	NSDictionary *query = @{
+    (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
+    (__bridge id)kSecAttrService: key,
+		(__bridge id)kSecUseOperationPrompt: message,
+		(__bridge id)kSecReturnData: YES
+  };
+
+	CFDataRef dataRef = NULL;
+	OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, (CFTypeRef*)&dataRef);
+
+	NSData *passwordData = (__bridge_transfer NSData *)dataRef;
+	NSString *password = [[NSString alloc] initWithData:passwordData encoding:NSUTF8StringEncoding];
+	
+	if (status == errSecSuccess) {
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:password];
+  } else {
+    CFStringRef errorMessage = SecCopyErrorMessageString(status, NULL);
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:(__bridge NSString *)errorMessage];
+  }
 }
 
 @end
