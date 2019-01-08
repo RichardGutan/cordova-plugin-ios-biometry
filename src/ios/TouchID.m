@@ -265,8 +265,7 @@ NSString *keychainItemServiceName;
 - (BOOL) isInKeychain: (NSString*) key {
   NSDictionary *query = @{
     (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
-    (__bridge id)kSecAttrService: key,
-    (__bridge id)kSecUseAuthenticationUI: (__bridge id)kSecUseAuthenticationUIFail
+    (__bridge id)kSecAttrService: key
   };
 
   CFDataRef dataRef = NULL;
