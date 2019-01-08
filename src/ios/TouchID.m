@@ -237,7 +237,7 @@ NSString *keychainItemServiceName;
     NSDictionary *attributesToUpdate = @{
       (__bridge id)kSecValueData: [value dataUsingEncoding:NSUTF8StringEncoding],
     };
-
+    NSLog(@"123");
     result = SecItemUpdate((__bridge CFDictionaryRef)query, (__bridge CFDictionaryRef)attributesToUpdate);
   } else {
     NSDictionary *query = @{
@@ -246,7 +246,7 @@ NSString *keychainItemServiceName;
       (__bridge id)kSecValueData: [value dataUsingEncoding:NSUTF8StringEncoding],
       (__bridge id)kSecAttrAccessControl: (__bridge id)accessControlRef
     };
-    
+    NSLog(@"456");
     result = SecItemAdd((__bridge CFDictionaryRef)query, NULL);
   }
 
