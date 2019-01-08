@@ -265,12 +265,17 @@ NSString *keychainItemServiceName;
 - (BOOL) isInKeychain: (NSString*) key {
   NSDictionary *query = @{
     (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
-    (__bridge id)kSecAttrService: key
+    (__bridge id)kSecAttrService: key,
+    (__bridge id)kSecReturnData: (__bridge id)kCFBooleanTrue
   };
 
   CFDataRef dataRef = NULL;
   OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, (CFTypeRef*)&dataRef);
-  NSLog((__bridge NSString *)dataRef);
+    
+  NSData *passwordData = (__bridge_transfer NSData *)dataRef;
+  NSString *password = [[NSString alloc] initWithData:passwordData encoding:NSUTF8StringEncoding];
+  NSLog(password);
+
   switch (status) {
     case errSecInteractionNotAllowed:
       return @YES;
