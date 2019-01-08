@@ -231,7 +231,8 @@ NSString *keychainItemServiceName;
     NSDictionary *query = @{
       (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
       (__bridge id)kSecAttrService: key,
-      (__bridge id)kSecAttrAccessControl: (__bridge id)accessControlRef
+      (__bridge id)kSecAttrAccessControl: (__bridge id)accessControlRef,
+      (__bridge id)kSecUseAuthenticationUI: (__bridge id)kSecUseAuthenticationUIAllow
     };
 
     NSDictionary *attributesToUpdate = @{
@@ -244,7 +245,8 @@ NSString *keychainItemServiceName;
       (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
       (__bridge id)kSecAttrService: key,
       (__bridge id)kSecValueData: [value dataUsingEncoding:NSUTF8StringEncoding],
-      (__bridge id)kSecAttrAccessControl: (__bridge id)accessControlRef
+      (__bridge id)kSecAttrAccessControl: (__bridge id)accessControlRef,
+      (__bridge id)kSecUseAuthenticationUI: (__bridge id)kSecUseAuthenticationUIAllow
     };
     
     result = SecItemAdd((__bridge CFDictionaryRef)query, NULL);
