@@ -270,7 +270,7 @@ NSString *keychainItemServiceName;
 
   CFDataRef dataRef = NULL;
   OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, (CFTypeRef*)&dataRef);
-
+  NSLog((__bridge NSString *)dataRef);
   switch (status) {
     case errSecInteractionNotAllowed:
       return @YES;
