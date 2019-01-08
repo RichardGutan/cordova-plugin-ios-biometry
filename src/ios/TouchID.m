@@ -275,6 +275,7 @@ NSString *keychainItemServiceName;
   NSData *passwordData = (__bridge_transfer NSData *)dataRef;
   NSString *password = [[NSString alloc] initWithData:passwordData encoding:NSUTF8StringEncoding];
   NSLog(password);
+  NSLog((__bridge NSString *)SecCopyErrorMessageString(status, NULL));
 
   switch (status) {
     case errSecInteractionNotAllowed:
