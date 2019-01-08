@@ -214,7 +214,7 @@ NSString *keychainItemServiceName;
 - (void) saveToKeychain:(CDVInvokedUrlCommand*) command {
   
   CDVPluginResult* pluginResult = NULL;
-  NSString* key = [command.arguments objectAtIndex:0]
+  NSString* key = [command.arguments objectAtIndex:0];
   NSString* value = [command.arguments objectAtIndex:1];
 
   CFErrorRef accessControlError = NULL;
