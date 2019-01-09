@@ -37,7 +37,7 @@ TouchID.prototype.remove = function (key, message, successCallback, errorCallbac
   cordova.exec(successCallback, errorCallback, "TouchID", "remove", [key, message]);
 };
 
-TouchID.prototype.retrieve = function (key, value, message, successCallback, errorCallback) {
+TouchID.prototype.retrieve = function (key, message, successCallback, errorCallback) {
   cordova.exec(successCallback, errorCallback, "TouchID", "retrieve", [key, message]);
 };
 
