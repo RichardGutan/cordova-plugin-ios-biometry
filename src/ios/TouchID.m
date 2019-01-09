@@ -250,7 +250,7 @@ NSString *keychainItemServiceName;
 	CDVPluginResult* pluginResult = NULL;
 	NSString* key = [command.arguments objectAtIndex:0];
 	NSString* value = [command.arguments objectAtIndex:1];
-	NSString* value = [command.arguments objectAtIndex:2];
+	NSString* message = [command.arguments objectAtIndex:2];
 
 	CFErrorRef accessControlError = NULL;
 	SecAccessControlRef accessControlRef = SecAccessControlCreateWithFlags(
@@ -339,7 +339,7 @@ NSString *keychainItemServiceName;
 		(__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
 		(__bridge id)kSecAttrService: key,
 		(__bridge id)kSecUseOperationPrompt: message,
-		(__bridge id)kSecReturnData: YES
+		(__bridge id)kSecReturnData: @YES
 	};
 
 	CFDataRef dataRef = NULL;
