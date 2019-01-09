@@ -33,8 +33,8 @@ TouchID.prototype.contains = function (key, successCallback, errorCallback) {
   cordova.exec(successCallback, errorCallback, "TouchID", "contains", [key]);
 };
 
-TouchID.prototype.remove = function (key, message, successCallback, errorCallback) {
-  cordova.exec(successCallback, errorCallback, "TouchID", "remove", [key, message]);
+TouchID.prototype.remove = function (key, successCallback, errorCallback) {
+  cordova.exec(successCallback, errorCallback, "TouchID", "remove", [key]);
 };
 
 TouchID.prototype.retrieve = function (key, message, successCallback, errorCallback) {

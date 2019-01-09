@@ -309,12 +309,10 @@ NSString *keychainItemServiceName;
 
 	CDVPluginResult* pluginResult = NULL;
 	NSString *key = [command.arguments objectAtIndex:0];
-	NSString *message = [command.arguments objectAtIndex:1];
 
 	NSDictionary *query = @{
 		(__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
-		(__bridge id)kSecAttrService: key,
-		(__bridge id)kSecUseOperationPrompt: message
+		(__bridge id)kSecAttrService: key
 	};
 
 	OSStatus status = SecItemDelete((__bridge CFDictionaryRef)query);
