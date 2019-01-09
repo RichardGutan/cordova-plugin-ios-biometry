@@ -1,6 +1,6 @@
 #import <Cordova/CDVPlugin.h>
 
-@interface TouchID :CDVPlugin
+@interface BiometricKeychain :CDVPlugin
 
 - (void) isAvailable:(CDVInvokedUrlCommand*)command;
 

@@ -1,9 +1,9 @@
-#import "TouchID.h"
+#import "BiometricKeychain.h"
 #import <LocalAuthentication/LocalAuthentication.h>
 
 static NSString *const FingerprintDatabaseStateKey = @"FingerprintDatabaseStateKey";
 
-@implementation TouchID
+@implementation BiometricKeychain
 
 // These two combined need to be unique, so one can be fixed
 NSString *keychainItemIdentifier = @"TouchIDKey";
