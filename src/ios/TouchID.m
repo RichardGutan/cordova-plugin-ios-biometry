@@ -213,18 +213,18 @@ NSString *keychainItemServiceName;
 
 - (void) add:(CDVInvokedUrlCommand*) command {
   
-  CDVPluginResult* pluginResult = NULL;
-  NSString* key = [command.arguments objectAtIndex:0];
-  NSString* value = [command.arguments objectAtIndex:1];
+	CDVPluginResult* pluginResult = NULL;
+	NSString* key = [command.arguments objectAtIndex:0];
+	NSString* value = [command.arguments objectAtIndex:1];
 
-  CFErrorRef accessControlError = NULL;
-  SecAccessControlRef accessControlRef = SecAccessControlCreateWithFlags(
-    kCFAllocatorDefault,
-    kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
-    kSecAccessControlBiometryCurrentSet,
-    &accessControlError
-  );
-  
+	CFErrorRef accessControlError = NULL;
+	SecAccessControlRef accessControlRef = SecAccessControlCreateWithFlags(
+		kCFAllocatorDefault,
+		kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
+		kSecAccessControlBiometryCurrentSet,
+		&accessControlError
+	);
+
 	NSDictionary *query = @{
 		(__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
 		(__bridge id)kSecAttrService: key,
@@ -232,34 +232,34 @@ NSString *keychainItemServiceName;
 		(__bridge id)kSecAttrAccessControl: (__bridge id)accessControlRef,
 		(__bridge id)kSecUseAuthenticationUI: (__bridge id)kSecUseAuthenticationUIAllow
 	};
-	
+
 	OSStatus result = SecItemAdd((__bridge CFDictionaryRef)query, NULL);
 
-  if (result == errSecSuccess) {
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-  } else {
-    CFStringRef errorMessage = SecCopyErrorMessageString(result, NULL);
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:(__bridge NSString *)errorMessage];
-  }
-  
-  [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+	if (result == errSecSuccess) {
+		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+	} else {
+		CFStringRef errorMessage = SecCopyErrorMessageString(result, NULL);
+		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:(__bridge NSString *)errorMessage];
+	}
+
+	[self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 - (void) update:(CDVInvokedUrlCommand*) command {
   
-  CDVPluginResult* pluginResult = NULL;
-  NSString* key = [command.arguments objectAtIndex:0];
-  NSString* value = [command.arguments objectAtIndex:1];
+	CDVPluginResult* pluginResult = NULL;
+	NSString* key = [command.arguments objectAtIndex:0];
+	NSString* value = [command.arguments objectAtIndex:1];
 	NSString* value = [command.arguments objectAtIndex:2];
 
-  CFErrorRef accessControlError = NULL;
-  SecAccessControlRef accessControlRef = SecAccessControlCreateWithFlags(
-    kCFAllocatorDefault,
-    kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
-    kSecAccessControlBiometryCurrentSet,
-    &accessControlError
-  );
-  
+	CFErrorRef accessControlError = NULL;
+	SecAccessControlRef accessControlRef = SecAccessControlCreateWithFlags(
+		kCFAllocatorDefault,
+		kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
+		kSecAccessControlBiometryCurrentSet,
+		&accessControlError
+	);
+
 	NSDictionary *query = @{
 		(__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
 		(__bridge id)kSecAttrService: key,
@@ -270,32 +270,32 @@ NSString *keychainItemServiceName;
 	NSDictionary *attributesToUpdate = @{
 		(__bridge id)kSecValueData: [value dataUsingEncoding:NSUTF8StringEncoding],
 	};
-	
+
 	OSStatus result = SecItemUpdate((__bridge CFDictionaryRef)query, (__bridge CFDictionaryRef)attributesToUpdate);
-  
-  if (result == errSecSuccess) {
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-  } else {
-    CFStringRef errorMessage = SecCopyErrorMessageString(result, NULL);
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:(__bridge NSString *)errorMessage];
-  }
-  
-  [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+
+	if (result == errSecSuccess) {
+		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+	} else {
+		CFStringRef errorMessage = SecCopyErrorMessageString(result, NULL);
+		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:(__bridge NSString *)errorMessage];
+	}
+
+	[self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 - (void) contains:(CDVInvokedUrlCommand*) command {
 
 	CDVPluginResult* pluginResult = NULL;
 	NSString *key = [command.arguments objectAtIndex:0];
-  NSDictionary *query = @{
-    (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
-    (__bridge id)kSecAttrService: key,
-    (__bridge id)kSecUseAuthenticationUI: (__bridge id)kSecUseAuthenticationUIFail
-  };
+	NSDictionary *query = @{
+		(__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
+		(__bridge id)kSecAttrService: key,
+		(__bridge id)kSecUseAuthenticationUI: (__bridge id)kSecUseAuthenticationUIFail
+	};
 
-  OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, NULL);
-    
-  if (status == errSecInteractionNotAllowed) {
+	OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, NULL);
+		
+	if (status == errSecInteractionNotAllowed) {
 		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 	} else {
 		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
@@ -311,20 +311,20 @@ NSString *keychainItemServiceName;
 	NSString *key = [command.arguments objectAtIndex:0];
 	NSString *message = [command.arguments objectAtIndex:1];
 
-  NSDictionary *query = @{
-    (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
-    (__bridge id)kSecAttrService: key,
+	NSDictionary *query = @{
+		(__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
+		(__bridge id)kSecAttrService: key,
 		(__bridge id)kSecUseOperationPrompt: message
-  };
+	};
 
 	OSStatus status = SecItemDelete((__bridge CFDictionaryRef)query);
 
 	if (status == errSecSuccess) {
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-  } else {
-    CFStringRef errorMessage = SecCopyErrorMessageString(status, NULL);
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:(__bridge NSString *)errorMessage];
-  }
+		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+	} else {
+		CFStringRef errorMessage = SecCopyErrorMessageString(status, NULL);
+		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:(__bridge NSString *)errorMessage];
+	}
 
 	[self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
@@ -336,24 +336,24 @@ NSString *keychainItemServiceName;
 	NSString *message = [command.arguments objectAtIndex:1];
 
 	NSDictionary *query = @{
-    (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
-    (__bridge id)kSecAttrService: key,
+		(__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
+		(__bridge id)kSecAttrService: key,
 		(__bridge id)kSecUseOperationPrompt: message,
 		(__bridge id)kSecReturnData: YES
-  };
+	};
 
 	CFDataRef dataRef = NULL;
 	OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, (CFTypeRef*)&dataRef);
 
 	NSData *passwordData = (__bridge_transfer NSData *)dataRef;
 	NSString *password = [[NSString alloc] initWithData:passwordData encoding:NSUTF8StringEncoding];
-	
+
 	if (status == errSecSuccess) {
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:password];
-  } else {
-    CFStringRef errorMessage = SecCopyErrorMessageString(status, NULL);
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:(__bridge NSString *)errorMessage];
-  }
+		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:password];
+	} else {
+		CFStringRef errorMessage = SecCopyErrorMessageString(status, NULL);
+		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:(__bridge NSString *)errorMessage];
+	}
 
 	[self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
