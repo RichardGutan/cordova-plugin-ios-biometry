@@ -220,7 +220,7 @@ NSString *keychainItemServiceName;
   CFErrorRef accessControlError = NULL;
   SecAccessControlRef accessControlRef = SecAccessControlCreateWithFlags(
     kCFAllocatorDefault,
-    kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
+    kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
     kSecAccessControlBiometryCurrentSet,
     &accessControlError
   );
@@ -255,7 +255,7 @@ NSString *keychainItemServiceName;
   CFErrorRef accessControlError = NULL;
   SecAccessControlRef accessControlRef = SecAccessControlCreateWithFlags(
     kCFAllocatorDefault,
-    kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
+    kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
     kSecAccessControlBiometryCurrentSet,
     &accessControlError
   );
@@ -305,7 +305,7 @@ NSString *keychainItemServiceName;
 }
 
 
-- (void) delete:(CDVInvokedUrlCommand*) command {
+- (void) remove:(CDVInvokedUrlCommand*) command {
 
 	CDVPluginResult* pluginResult = NULL;
 	NSString *key = [command.arguments objectAtIndex:0];

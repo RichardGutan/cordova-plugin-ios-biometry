@@ -10,6 +10,10 @@
 - (void) verifyFingerprintWithCustomPasswordFallback:(CDVInvokedUrlCommand*)command;
 - (void) verifyFingerprintWithCustomPasswordFallbackAndEnterPasswordLabel:(CDVInvokedUrlCommand*)command;
 
-- (void) saveToKeychain:(CDVInvokedUrlCommand*) command;
+- (void) add:(CDVInvokedUrlCommand*) command;
+- (void) update:(CDVInvokedUrlCommand*) command;
+- (void) contains:(CDVInvokedUrlCommand*) command;
+- (void) remove:(CDVInvokedUrlCommand*) command;
+- (void) retrieve:(CDVInvokedUrlCommand*) command;
 
 @end
