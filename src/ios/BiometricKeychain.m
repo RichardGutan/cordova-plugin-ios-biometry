@@ -238,8 +238,8 @@ NSString *keychainItemServiceName;
 	if (result == errSecSuccess) {
 		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 	} else {
-		CFStringRef errorMessage = SecCopyErrorMessageString(result, NULL);
-		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:(__bridge NSString *)errorMessage];
+		NSString* errorCode = [NSString stringWithFormat:@"%i", result];
+		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errorCode];
 	}
 
 	[self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -276,8 +276,8 @@ NSString *keychainItemServiceName;
 	if (result == errSecSuccess) {
 		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 	} else {
-		CFStringRef errorMessage = SecCopyErrorMessageString(result, NULL);
-		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:(__bridge NSString *)errorMessage];
+		NSString* errorCode = [NSString stringWithFormat:@"%i", result];
+		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errorCode];
 	}
 
 	[self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -320,8 +320,8 @@ NSString *keychainItemServiceName;
 	if (status == errSecSuccess) {
 		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 	} else {
-		CFStringRef errorMessage = SecCopyErrorMessageString(status, NULL);
-		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:(__bridge NSString *)errorMessage];
+		NSString* errorCode = [NSString stringWithFormat:@"%i", status];
+		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errorCode];
 	}
 
 	[self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -349,8 +349,8 @@ NSString *keychainItemServiceName;
 	if (status == errSecSuccess) {
 		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:password];
 	} else {
-		CFStringRef errorMessage = SecCopyErrorMessageString(status, NULL);
-		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:(__bridge NSString *)errorMessage];
+    NSString* errorCode = [NSString stringWithFormat:@"%i", status];
+		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errorCode];
 	}
 
 	[self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
