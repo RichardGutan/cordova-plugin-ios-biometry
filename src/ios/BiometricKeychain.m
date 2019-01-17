@@ -221,7 +221,7 @@ NSString *keychainItemServiceName;
 	SecAccessControlRef accessControlRef = SecAccessControlCreateWithFlags(
 		kCFAllocatorDefault,
 		kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
-		kSecAccessControlBiometryCurrentSet,
+		1u << 3, // kSecAccessControlBiometryCurrentSet || kSecAccessControlTouchIDCurrentSet
 		&accessControlError
 	);
 
@@ -256,7 +256,7 @@ NSString *keychainItemServiceName;
 	SecAccessControlRef accessControlRef = SecAccessControlCreateWithFlags(
 		kCFAllocatorDefault,
 		kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
-		kSecAccessControlBiometryCurrentSet,
+		1u << 3, // kSecAccessControlBiometryCurrentSet || kSecAccessControlTouchIDCurrentSet
 		&accessControlError
 	);
 
@@ -281,21 +281,6 @@ NSString *keychainItemServiceName;
 	}
 
 	[self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-
-- (SecAccessControlRef) getAccessControlRef {
-  NSInteger userPresence = NULL;
-  if (@available(iOS 11.3, *)) {
-    userPresence = kSecAccessControlBiometryCurrentSet;
-  } else {
-    userPresence = kSecAccessControlTouchIDCurrentSet;
-  }
-  return SecAccessControlCreateWithFlags(
-		kCFAllocatorDefault,
-		kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
-		userPresence,
-		&accessControlError
-	);
 }
 
 - (void) contains:(CDVInvokedUrlCommand*) command {
