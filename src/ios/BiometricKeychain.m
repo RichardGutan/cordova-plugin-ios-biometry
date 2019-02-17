@@ -1,4 +1,5 @@
 #import "BiometricKeychain.h"
+#import <LocalAuthentication/LocalAuthentication.h>
 
 @implementation BiometricKeychain
 
@@ -35,11 +36,11 @@ NSString *keychainItemServiceName = @"BiometricKeychainDummyValueForSecureVerifi
 
 - (void) verifyFingerprint:(CDVInvokedUrlCommand*)command {
 
-  CDVPluginResult* pluginResult = NULL;
   NSString *message = [command.arguments objectAtIndex:0];
   NSString *callbackId = command.callbackId;
 
   [self.commandDelegate runInBackground:^{
+    CDVPluginResult* pluginResult = NULL;
     [self createDummyKeychainEntry];
 
     NSDictionary *query = @{
@@ -84,11 +85,11 @@ NSString *keychainItemServiceName = @"BiometricKeychainDummyValueForSecureVerifi
 
 - (void) add:(CDVInvokedUrlCommand*) command {
   
-	CDVPluginResult* pluginResult = NULL;
 	NSString* key = [command.arguments objectAtIndex:0];
 	NSString* value = [command.arguments objectAtIndex:1];
 
   [self.commandDelegate runInBackground:^{
+    CDVPluginResult* pluginResult = NULL;
     CFErrorRef accessControlError = NULL;
     SecAccessControlRef accessControlRef = SecAccessControlCreateWithFlags(
       kCFAllocatorDefault,
@@ -120,12 +121,12 @@ NSString *keychainItemServiceName = @"BiometricKeychainDummyValueForSecureVerifi
 
 - (void) update:(CDVInvokedUrlCommand*) command {
   
-	CDVPluginResult* pluginResult = NULL;
 	NSString* key = [command.arguments objectAtIndex:0];
 	NSString* value = [command.arguments objectAtIndex:1];
 	NSString* message = [command.arguments objectAtIndex:2];
 
   [self.commandDelegate runInBackground:^{
+    CDVPluginResult* pluginResult = NULL;
     CFErrorRef accessControlError = NULL;
     SecAccessControlRef accessControlRef = SecAccessControlCreateWithFlags(
       kCFAllocatorDefault,
@@ -160,10 +161,10 @@ NSString *keychainItemServiceName = @"BiometricKeychainDummyValueForSecureVerifi
 
 - (void) contains:(CDVInvokedUrlCommand*) command {
 
-	CDVPluginResult* pluginResult = NULL;
 	NSString *key = [command.arguments objectAtIndex:0];
 
   [self.commandDelegate runInBackground:^{
+    CDVPluginResult* pluginResult = NULL;
     NSDictionary *query = @{
       (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
       (__bridge id)kSecAttrService: key,
@@ -185,10 +186,10 @@ NSString *keychainItemServiceName = @"BiometricKeychainDummyValueForSecureVerifi
 
 - (void) remove:(CDVInvokedUrlCommand*) command {
 
-	CDVPluginResult* pluginResult = NULL;
 	NSString *key = [command.arguments objectAtIndex:0];
 
   [self.commandDelegate runInBackground:^{
+    CDVPluginResult* pluginResult = NULL;
     NSDictionary *query = @{
       (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
       (__bridge id)kSecAttrService: key
@@ -209,11 +210,11 @@ NSString *keychainItemServiceName = @"BiometricKeychainDummyValueForSecureVerifi
 
 - (void) retrieve:(CDVInvokedUrlCommand*) command {
 
-	CDVPluginResult* pluginResult = NULL;
 	NSString *key = [command.arguments objectAtIndex:0];
 	NSString *message = [command.arguments objectAtIndex:1];
 
   [self.commandDelegate runInBackground:^{
+    CDVPluginResult* pluginResult = NULL;
     NSDictionary *query = @{
       (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
       (__bridge id)kSecAttrService: key,
