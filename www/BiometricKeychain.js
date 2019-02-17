@@ -5,20 +5,8 @@ BiometricKeychain.prototype.isAvailable = function (successCallback, errorCallba
   cordova.exec(successCallback, errorCallback, "BiometricKeychain", "isAvailable", []);
 };
 
-BiometricKeychain.prototype.didFingerprintDatabaseChange = function (successCallback, errorCallback) {
-  cordova.exec(successCallback, errorCallback, "BiometricKeychain", "didFingerprintDatabaseChange", []);
-};
-
 BiometricKeychain.prototype.verifyFingerprint = function (message, successCallback, errorCallback) {
   cordova.exec(successCallback, errorCallback, "BiometricKeychain", "verifyFingerprint", [message]);
-};
-
-BiometricKeychain.prototype.verifyFingerprintWithCustomPasswordFallback = function (message, successCallback, errorCallback) {
-  cordova.exec(successCallback, errorCallback, "BiometricKeychain", "verifyFingerprintWithCustomPasswordFallback", [message]);
-};
-
-BiometricKeychain.prototype.verifyFingerprintWithCustomPasswordFallbackAndEnterPasswordLabel = function (message, enterPasswordLabel, successCallback, errorCallback) {
-  cordova.exec(successCallback, errorCallback, "BiometricKeychain", "verifyFingerprintWithCustomPasswordFallbackAndEnterPasswordLabel", [message, enterPasswordLabel]);
 };
 
 BiometricKeychain.prototype.add = function(key, value, successCallback, errorCallback) {
