@@ -3,6 +3,13 @@
 
 @implementation BiometricKeychain
 
+NSDictionary *accessControlFlags = @{
+  @"kSecAccessControlDevicePasscode": 1u << 4,
+  @"kSecAccessControlUserPresence": 1u << 0,
+  @"kSecAccessControlBiometryAny": 1u << 1,
+  @"kSecAccessControlBiometryCurrentSet": 1u << 3
+};
+
 NSString *keychainItemServiceName = @"BiometricKeychainDummyValueForSecureVerification";
 
 - (void) isAvailable:(CDVInvokedUrlCommand*)command {
@@ -37,11 +44,12 @@ NSString *keychainItemServiceName = @"BiometricKeychainDummyValueForSecureVerifi
 - (void) verifyFingerprint:(CDVInvokedUrlCommand*)command {
 
   NSString *message = [command.arguments objectAtIndex:0];
+  NSString *accessControlFlag = [command.arguments objectAtIndex:1];
   NSString *callbackId = command.callbackId;
 
   [self.commandDelegate runInBackground:^{
     CDVPluginResult* pluginResult = NULL;
-    [self createDummyKeychainEntry];
+    [self createDummyKeychainEntry:accessControlFlag];
 
     NSDictionary *query = @{
       (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
@@ -62,24 +70,24 @@ NSString *keychainItemServiceName = @"BiometricKeychainDummyValueForSecureVerifi
   }];
 }
 
-- (void) createDummyKeychainEntry {
+- (void) createDummyKeychainEntry:(NSString*) accessControlFlag {
 
   NSDictionary *query = @{
 		(__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
 		(__bridge id)kSecAttrService: keychainItemServiceName,
 		(__bridge id)kSecValueData: [@"dummy content" dataUsingEncoding:NSUTF8StringEncoding],
-		(__bridge id)kSecAttrAccessControl: (__bridge id)[self getAccessControlRef],
+		(__bridge id)kSecAttrAccessControl: (__bridge id)[self getAccessControlRef:accessControlFlag],
 		(__bridge id)kSecUseAuthenticationUI: (__bridge id)kSecUseAuthenticationUIAllow
 	};
 
   SecItemAdd((__bridge CFDictionaryRef)query, NULL);
 }
 
-- (SecAccessControlRef) getAccessControlRef {
+- (SecAccessControlRef) getAccessControlRef:(NSString*) accessControlFlag {
   return SecAccessControlCreateWithFlags(
     kCFAllocatorDefault,
     kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
-    1u << 3, // kSecAccessControlBiometryCurrentSet || kSecAccessControlTouchIDCurrentSet
+    accessControlFlags[accessControlFlag],
     NULL
   );
 }
@@ -88,6 +96,7 @@ NSString *keychainItemServiceName = @"BiometricKeychainDummyValueForSecureVerifi
   
 	NSString* key = [command.arguments objectAtIndex:0];
 	NSString* value = [command.arguments objectAtIndex:1];
+  NSString* accessControlFlag = [command.arguments objectAtIndex:2];
 
   [self.commandDelegate runInBackground:^{
     CDVPluginResult* pluginResult = NULL;
@@ -96,7 +105,7 @@ NSString *keychainItemServiceName = @"BiometricKeychainDummyValueForSecureVerifi
       (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
       (__bridge id)kSecAttrService: key,
       (__bridge id)kSecValueData: [value dataUsingEncoding:NSUTF8StringEncoding],
-      (__bridge id)kSecAttrAccessControl: (__bridge id)[self getAccessControlRef],
+      (__bridge id)kSecAttrAccessControl: (__bridge id)[self getAccessControlRef:accessControlFlag],
       (__bridge id)kSecUseAuthenticationUI: (__bridge id)kSecUseAuthenticationUIAllow
     };
 
@@ -118,6 +127,7 @@ NSString *keychainItemServiceName = @"BiometricKeychainDummyValueForSecureVerifi
 	NSString* key = [command.arguments objectAtIndex:0];
 	NSString* value = [command.arguments objectAtIndex:1];
 	NSString* message = [command.arguments objectAtIndex:2];
+  NSString* accessControlFlag = [command.arguments objectAtIndex:3];
 
   [self.commandDelegate runInBackground:^{
     CDVPluginResult* pluginResult = NULL;
@@ -125,7 +135,7 @@ NSString *keychainItemServiceName = @"BiometricKeychainDummyValueForSecureVerifi
     NSDictionary *query = @{
       (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
       (__bridge id)kSecAttrService: key,
-      (__bridge id)kSecAttrAccessControl: (__bridge id)[self getAccessControlRef],
+      (__bridge id)kSecAttrAccessControl: (__bridge id)[self getAccessControlRef:accessControlFlag],
       (__bridge id)kSecUseOperationPrompt: message
     };
 
