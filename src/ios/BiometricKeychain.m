@@ -64,23 +64,24 @@ NSString *keychainItemServiceName = @"BiometricKeychainDummyValueForSecureVerifi
 
 - (void) createDummyKeychainEntry {
 
-  CFErrorRef accessControlError = NULL;
-  SecAccessControlRef accessControlRef = SecAccessControlCreateWithFlags(
-    kCFAllocatorDefault,
-    kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
-    1u << 3, // kSecAccessControlBiometryCurrentSet || kSecAccessControlTouchIDCurrentSet
-    &accessControlError
-  );
-
   NSDictionary *query = @{
 		(__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
 		(__bridge id)kSecAttrService: keychainItemServiceName,
 		(__bridge id)kSecValueData: [@"dummy content" dataUsingEncoding:NSUTF8StringEncoding],
-		(__bridge id)kSecAttrAccessControl: (__bridge id)accessControlRef,
+		(__bridge id)kSecAttrAccessControl: (__bridge id)[self getAccessControlRef],
 		(__bridge id)kSecUseAuthenticationUI: (__bridge id)kSecUseAuthenticationUIAllow
 	};
 
   SecItemAdd((__bridge CFDictionaryRef)query, NULL);
+}
+
+- (SecAccessControlRef) getAccessControlRef {
+  return SecAccessControlCreateWithFlags(
+    kCFAllocatorDefault,
+    kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
+    1u << 3, // kSecAccessControlBiometryCurrentSet || kSecAccessControlTouchIDCurrentSet
+    NULL
+  );
 }
 
 - (void) add:(CDVInvokedUrlCommand*) command {
@@ -90,19 +91,12 @@ NSString *keychainItemServiceName = @"BiometricKeychainDummyValueForSecureVerifi
 
   [self.commandDelegate runInBackground:^{
     CDVPluginResult* pluginResult = NULL;
-    CFErrorRef accessControlError = NULL;
-    SecAccessControlRef accessControlRef = SecAccessControlCreateWithFlags(
-      kCFAllocatorDefault,
-      kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
-      1u << 3, // kSecAccessControlBiometryCurrentSet || kSecAccessControlTouchIDCurrentSet
-      &accessControlError
-    );
 
     NSDictionary *query = @{
       (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
       (__bridge id)kSecAttrService: key,
       (__bridge id)kSecValueData: [value dataUsingEncoding:NSUTF8StringEncoding],
-      (__bridge id)kSecAttrAccessControl: (__bridge id)accessControlRef,
+      (__bridge id)kSecAttrAccessControl: (__bridge id)[self getAccessControlRef],
       (__bridge id)kSecUseAuthenticationUI: (__bridge id)kSecUseAuthenticationUIAllow
     };
 
@@ -127,18 +121,11 @@ NSString *keychainItemServiceName = @"BiometricKeychainDummyValueForSecureVerifi
 
   [self.commandDelegate runInBackground:^{
     CDVPluginResult* pluginResult = NULL;
-    CFErrorRef accessControlError = NULL;
-    SecAccessControlRef accessControlRef = SecAccessControlCreateWithFlags(
-      kCFAllocatorDefault,
-      kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
-      1u << 3, // kSecAccessControlBiometryCurrentSet || kSecAccessControlTouchIDCurrentSet
-      &accessControlError
-    );
 
     NSDictionary *query = @{
       (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
       (__bridge id)kSecAttrService: key,
-      (__bridge id)kSecAttrAccessControl: (__bridge id)accessControlRef,
+      (__bridge id)kSecAttrAccessControl: (__bridge id)[self getAccessControlRef],
       (__bridge id)kSecUseOperationPrompt: message
     };
 
