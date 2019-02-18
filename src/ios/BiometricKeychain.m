@@ -3,13 +3,6 @@
 
 @implementation BiometricKeychain
 
-NSDictionary *accessControlFlags = @{
-  @"kSecAccessControlDevicePasscode": 1u << 4,
-  @"kSecAccessControlUserPresence": 1u << 0,
-  @"kSecAccessControlBiometryAny": 1u << 1,
-  @"kSecAccessControlBiometryCurrentSet": 1u << 3
-};
-
 NSString *keychainItemServiceName = @"BiometricKeychainDummyValueForSecureVerification";
 
 - (void) isAvailable:(CDVInvokedUrlCommand*)command {
@@ -45,7 +38,6 @@ NSString *keychainItemServiceName = @"BiometricKeychainDummyValueForSecureVerifi
 
   NSString *message = [command.arguments objectAtIndex:0];
   NSString *accessControlFlag = [command.arguments objectAtIndex:1];
-  NSString *callbackId = command.callbackId;
 
   [self.commandDelegate runInBackground:^{
     CDVPluginResult* pluginResult = NULL;
@@ -84,10 +76,17 @@ NSString *keychainItemServiceName = @"BiometricKeychainDummyValueForSecureVerifi
 }
 
 - (SecAccessControlRef) getAccessControlRef:(NSString*) accessControlFlag {
+  NSDictionary *accessControlFlags = @{
+    @"kSecAccessControlDevicePasscode": @(1u << 4),
+    @"kSecAccessControlUserPresence": @(1u << 0),
+    @"kSecAccessControlBiometryAny": @(1u << 1),
+    @"kSecAccessControlBiometryCurrentSet": @(1u << 3)
+  };
+
   return SecAccessControlCreateWithFlags(
     kCFAllocatorDefault,
     kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
-    accessControlFlags[accessControlFlag],
+    [accessControlFlags[accessControlFlag] integerValue],
     NULL
   );
 }
