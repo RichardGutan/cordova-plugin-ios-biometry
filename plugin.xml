@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-        id="cordova-plugin-touch-id"
+        id="cordova-plugin-ios-biometry"
         version="3.3.1">
 
   <name>Touch ID</name>
@@ -34,12 +34,6 @@
       <feature name="BiometricKeychain">
         <param name="ios-package" value="BiometricKeychain"/>
       </feature>
-    </config-file>
-
-    <!-- Usage description of Face ID for iOS 11+ -->
-    <preference name="FACEID_USAGE_DESCRIPTION" default=" " />
-    <config-file target="*-Info.plist" parent="NSFaceIDUsageDescription">
-      <string>$FACEID_USAGE_DESCRIPTION</string>
     </config-file>
 
     <framework src="LocalAuthentication.framework" />
