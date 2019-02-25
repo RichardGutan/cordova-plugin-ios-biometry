@@ -1,6 +1,6 @@
 # Cordova iOS Biometry plugin
 
-This repository is fork of [cordova-plugin-touch-id](https://github.com/EddyVerbruggen/cordova-plugin-touch-id) with added Keychain access and secured against [touch id bypass](https://github.com/sensepost/objection/wiki/Understanding-the-TouchID-Bypass).
+This repository is a fork of [cordova-plugin-touch-id](https://github.com/EddyVerbruggen/cordova-plugin-touch-id) with added Keychain access and secured against [touch id bypass](https://github.com/sensepost/objection/wiki/Understanding-the-TouchID-Bypass).
 
 ## Index
 
